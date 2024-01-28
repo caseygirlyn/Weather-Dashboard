@@ -39,7 +39,7 @@ searchButton.on('click', function (event) {
   }
 
   // If the city doesn't exist in the local storage, call function displayCurrentForecast(city) and displayForecast(city)
-  if (cityExists === 0) {
+  if (cityExists === 0 && city !== '') {
     localStorage.setItem(localStorage.length + 1, city);
     displayCurrentForecast(city);
     displayForecast(city);
@@ -47,8 +47,10 @@ searchButton.on('click', function (event) {
     // Append the button to the list button group below the search form
     btnEl.attr('data-city', city);
     listGroup.append(btnEl);
+    searchInput.val('');
+  }else {
+    searchInput.addClass('is-invalid');
   }
-  searchInput.val('');
 });
 
 

@@ -2,7 +2,7 @@ let searchButton = $('#search-button');
 let searchInput = $('#search-input');
 let listGroup = $('#history');
 let todaySection = $('#today');
-let forcast = $('#forecast');
+let forecast = $('#forecast');
 let divContainer = $('<div>');
 let rowContainer = $('<div>');
 
@@ -12,9 +12,9 @@ function checkLSData() {
     let lsCity = localStorage.getItem(i);
     if (i === 1) {
       // Display the city and current weather if the localstorage has value
-      displayCurrentForcast(lsCity);
-      // Diplay the 5 day weather forcast
-      displayForcast(lsCity);
+      displayCurrentForecast(lsCity);
+      // Diplay the 5 day weather forecast
+      displayForecast(lsCity);
     }
     // Create the button element and set the text to city name
     btnEl = $('<button>').addClass('btn btn-secondary mb-3 text-capitalize').text(lsCity);
@@ -38,11 +38,11 @@ searchButton.on('click', function (event) {
     }
   }
 
-  // If the city doesn't exist in the local storage, call function displayCurrentForcast(city) and displayForcast(city)
+  // If the city doesn't exist in the local storage, call function displayCurrentForecast(city) and displayForecast(city)
   if (cityExists === 0) {
     localStorage.setItem(localStorage.length + 1, city);
-    displayCurrentForcast(city);
-    displayForcast(city);
+    displayCurrentForecast(city);
+    displayForecast(city);
     let btnEl = $('<button>').addClass('btn btn-secondary mb-3 text-capitalize').text(city);
     // Append the button to the list button group below the search form
     btnEl.attr('data-city', city);
@@ -52,7 +52,7 @@ searchButton.on('click', function (event) {
 });
 
 
-function displayCurrentForcast(city) {
+function displayCurrentForecast(city) {
 
   // Create variable queryURL and store the URL with parameters city and appid to make an API call
   let queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=6a43ea209a0fd6d7d6a35882a4db10c4`;
@@ -96,13 +96,13 @@ function displayCurrentForcast(city) {
     });
 }
 
-function displayForcast(city) {
+function displayForecast(city) {
   
   // Create variable queryURL and store the URL with parameters city and appid to make an API call
   let queryURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=6a43ea209a0fd6d7d6a35882a4db10c4`;
   rowContainer.empty();
   divContainer.empty();
-  forcast.empty();
+  forecast.empty();
 
   //  Method to call 5 day / 3 hour forecast data
   fetch(queryURL)
@@ -111,17 +111,17 @@ function displayForcast(city) {
     }).then(function (result) {
 
       let h3El = $('<h3>');
-      h3El.text('5-day Forcasts:').addClass('w-100');
-      forcast.append(h3El);
+      h3El.text('5-day Forecasts:').addClass('w-100');
+      forecast.append(h3El);
 
       //  Loop through the 3 hour forecast data and increase the count by 8 to get the daily forecast 
       // (24h / 3h = 8h)
       for (let i = 0; i < 40; i += 8) {
         // Get the icon from the API response and add it into an <img> tag 
         let icon = result.list[i].weather[0].icon;
-        iconForcast = $('<img>');
+        iconForecast = $('<img>');
         iconSrc = 'https://openweathermap.org/img/wn/' + icon + '@2x.png';
-        iconForcast.addClass('iconToday').attr('src', iconSrc);
+        iconForecast.addClass('iconToday').attr('src', iconSrc);
 
         // Get the date from the API response and add it into <h4> tag 
         let cityDate = result.list[i].dt_txt;
@@ -146,16 +146,21 @@ function displayForcast(city) {
 
         // Create divCol variable and append elements to display 5 day weather forecast
         let divCol = $('<div>');
-        divCol.addClass('col-sm col-xs-12 p-3 bg-forcasts text-white rounded-2').css('border', '3px solid #fff')
-        divCol.append(h4El, iconForcast, pTemp, pWind, pHumidity);
+        divCol.addClass('col-sm col-xs-12 p-3 bg-forecasts text-white rounded-2').css('border', '3px solid #fff')
+        divCol.append(h4El, iconForecast, pTemp, pWind, pHumidity);
 
         // Append divCol to rowContainer
         rowContainer.append(divCol).addClass('row m-0');
 
-        // Append rowContainer to forcast section
-        forcast.append(rowContainer);
+        // Append rowContainer to forecast section
+        forecast.append(rowContainer);
 
       }
     });
 }
 
+listGroup.on('click', 'button', function (event) {
+  let city = $(event.target).data('city');
+  displayForecast(city);
+  displayCurrentForecast(city);
+});

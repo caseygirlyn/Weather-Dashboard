@@ -3,6 +3,23 @@ let searchInput = $('#search-input');
 let listGroup = $('#history');
 let todaySection = $('#today');
 
+// Check if the localstorage has existing data
+function checkLSData() {
+  for (let i = 1; i < localStorage.length + 1; i++) {
+    let lsCity = localStorage.getItem(i);
+    if (i === 1) {
+      // Display the city and current weather if the localstorage has value
+      displayCurrentForcast(lsCity);
+    }
+    // Create the button element and set the text to city name
+    btnEl = $('<button>').addClass('btn btn-secondary mb-3 text-capitalize').text(lsCity);
+    btnEl.attr('data-city', lsCity);
+    listGroup.append(btnEl); // Append the button to the list button group
+  }
+}
+
+checkLSData();
+
 // Displays the current weather when user enters the city and clicks search button
 searchButton.on('click', function (event) {
   event.preventDefault();

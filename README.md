@@ -12,8 +12,8 @@ This Weather Dashboard is a web application that utilizes the OpenWeatherMap API
 ## Technologies Used
 
 - **Frontend:** HTML, CSS, Bootstrap and JavaScript
-- **Libraries** Day.js and jQuery
-- **API** OpenWeatherMap API 
+- **Libraries:** Day.js and jQuery
+- **API:** OpenWeatherMap 
 - **Version Control:** Git
 
 ## Screenshots

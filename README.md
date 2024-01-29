@@ -6,7 +6,7 @@ This Weather Dashboard is a web application that utilizes the OpenWeatherMap API
 
 - **Search City Form:** Easily search for the weather details of any city by entering its name in the provided search form.
 - **Current Weather:** Display the current weather condition, including temperature, wind speed and humidity.
-- **5-Day Forecast:** Provide a 5-day weather forecast with details including temperature, wind speed and humidity.
+- **Next 5-Day Forecast:** Provide a next 5-day weather forecast with details including temperature, wind speed and humidity.
 - **LocalStorage Integration:** Save the last searched cities in LocalStorage, allowing users to quickly access weather information for their preferred location upon returning to the dashboard.
 
 ## Technologies Used

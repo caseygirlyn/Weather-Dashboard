@@ -29,7 +29,7 @@ checkLSData();
 searchButton.on('click', function (event) {
   event.preventDefault();
   cityExists = 0;
-  let city = searchInput.val().trim();
+  let city = searchInput.val().trim().toLowerCase(); // Converts a string to lowercase letters
 
   // Loop to check if the city exists in the local storage
   for (let i = 1; i <= localStorage.length; i++) {
@@ -40,6 +40,7 @@ searchButton.on('click', function (event) {
 
   // If the city doesn't exist in the local storage, call function displayCurrentForecast(city) and displayForecast(city)
   if (cityExists === 0 && city !== '') {
+    // Set the key of the new city to localStorage.length + 1
     localStorage.setItem(localStorage.length + 1, city);
     displayCurrentForecast(city);
     displayForecast(city);
@@ -66,7 +67,8 @@ function displayCurrentForecast(city) {
     }).then(function (result) {
 
       // Create h2 element and set text to city name and the current date
-      const date = dayjs().format('D/M/YYYY');
+      const sunrise = (result.sys.sunrise + result.timezone) * 1000; // Convert to timezoned date
+      const date = dayjs(sunrise).format('D/M/YYYY');
       let h2El = $('<h2>');
       h2El.text(`${city} (${date})`);
       h2El.addClass('float-start text-capitalize');
@@ -83,6 +85,7 @@ function displayCurrentForecast(city) {
       pTemp.text(`Temperature: ${temperature} °C`);
 
       // Get the wind speed value from the API response and add into a <p> tag
+      // Multiply the speed value by 3.6 to convert meter per second to kilometer per hour
       let wind = result.wind.speed * 3.6;
       let pWind = $('<p>');
       pWind.text(`Wind: ${wind.toFixed(2)} KPH`);
@@ -116,9 +119,9 @@ function displayForecast(city) {
       h3El.text('5-day Forecasts:').addClass('w-100');
       forecast.append(h3El);
 
-      //  Loop through the 3 hour forecast data and increase the count by 8 to get the daily forecast 
+      //  Loop through the 3 hour forecast data and increase the count by 8 to get the next 5-day forecast 
       // (24h / 3h = 8h)
-      for (let i = 0; i < 40; i += 8) {
+      for (let i = 1; i < 40; i += 8) {
         // Get the icon from the API response and add it into an <img> tag 
         let icon = result.list[i].weather[0].icon;
         iconForecast = $('<img>');
@@ -136,7 +139,8 @@ function displayForecast(city) {
         let pTemp = $('<p>');
         pTemp.text(`Temperature: ${temperature} °C`);
 
-        // Get the wind speed value from the API response and add it into <p> tag 
+        // Get the wind speed value from the API response and add it into <p> tag
+        // Multiply the speed value by 3.6 to convert meter per second to kilometer per hour
         let wind = result.list[i].wind.speed * 3.6;
         let pWind = $('<p>');
         pWind.text(`Wind: ${wind.toFixed(2)} KPH`);
